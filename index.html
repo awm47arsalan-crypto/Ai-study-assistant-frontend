@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyAI — Premium AI Study Assistant</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            float: 'float 6s ease-in-out infinite',
+            pulseSlow: 'pulse 4s ease-in-out infinite',
+            gradient: 'gradient 12s ease infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-14px)' },
+            },
+            gradient: {
+              '0%, 100%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+            },
+          },
+          boxShadow: {
+            glow: '0 0 60px rgba(34,211,238,0.25)',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      background: #020617;
+      overflow-x: hidden;
+    }
+    .glass {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, #22d3ee, #a78bfa, #22d3ee);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient 10s ease infinite;
+    }
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body class="text-white antialiased">
+  <!-- Background -->
+  <div class="fixed inset-0 -z-20 bg-slate-950"></div>
+  <div class="fixed inset-0 -z-10 grid-bg opacity-30"></div>
+  <div class="fixed top-0 left-1/4 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl animate-pulseSlow -z-10"></div>
+  <div class="fixed bottom-0 right-1/4 h-96 w-96 rounded-full bg-violet-500/20 blur-3xl animate-pulseSlow -z-10"></div>
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
+    <nav class="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold gradient-text">StudyAI</h1>
+        <p class="text-xs text-slate-400">Premium AI Study Assistant</p>
+      </div>
+      <a href="#generator" class="rounded-xl bg-cyan-400 px-5 py-2.5 font-semibold text-slate-950 shadow-glow hover:scale-105 transition">
+        Launch App
+      </a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="mx-auto max-w-7xl px-6 py-20 md:py-28 grid md:grid-cols-2 gap-14 items-center">
+    <div>
+      <span class="inline-block rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-1 text-sm text-cyan-300">
+        Built for JEE & School Students
+      </span>
+
+      <h2 class="mt-6 text-5xl md:text-7xl font-black leading-tight">
+        Study <span class="gradient-text">Smarter</span>
+      </h2>
+
+      <p class="mt-6 text-lg text-slate-300 max-w-xl leading-8">
+        Generate notes, summaries, quizzes, and doubt solutions in seconds.
+        Your personal AI teacher that never gets tired.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="#generator" class="rounded-2xl bg-cyan-400 px-7 py-3.5 font-semibold text-slate-950 shadow-glow hover:scale-105 transition">
+          Try Now
+        </a>
+        <a href="#features" class="rounded-2xl border border-white/10 px-7 py-3.5 font-semibold hover:bg-white/5 transition">
+          Explore Features
+        </a>
+      </div>
+    </div>
+
+    <!-- Generator Card -->
+    <div id="generator" class="glass rounded-3xl p-6 md:p-8 shadow-2xl animate-float">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-2xl font-bold">AI Generator</h3>
+        <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs text-emerald-300 border border-emerald-400/20">
+          ● Online
+        </span>
+      </div>
+
+      <input
+        id="topicInput"
+        type="text"
+        placeholder="Enter topic (e.g. Nernst Equation)"
+        class="w-full rounded-2xl bg-slate-900/80 border border-white/10 px-4 py-3.5 outline-none focus:border-cyan-400 mb-4"
+      />
+
+      <select
+        id="featureSelect"
+        class="w-full rounded-2xl bg-slate-900/80 border border-white/10 px-4 py-3.5 outline-none focus:border-cyan-400 mb-4"
+      >
+        <option value="notes">📘 Notes Generator</option>
+        <option value="summary">📝 Summary Maker</option>
+        <option value="quiz">🧠 Quiz Generator</option>
+        <option value="doubt">❓ Doubt Solver</option>
+      </select>
+
+      <button
+        id="generateBtn"
+        class="w-full rounded-2xl bg-gradient-to-r from-cyan-400 to-violet-400 py-3.5 font-bold text-slate-950 hover:scale-[1.02] transition"
+      >
+        Generate with AI
+      </button>
+
+      <div class="mt-6 rounded-2xl bg-slate-900/70 border border-white/10 p-4">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-cyan-300 font-semibold">Output</p>
+          <button
+            id="copyBtn"
+            class="text-xs rounded-lg border border-white/10 px-3 py-1 hover:bg-white/5 transition"
+          >
+            Copy
+          </button>
+        </div>
+        <pre id="outputText" class="text-sm text-slate-300 leading-7">Enter a topic and click "Generate with AI".</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="mx-auto max-w-7xl px-6 py-20">
+    <div class="text-center mb-12">
+      <h3 class="text-4xl md:text-5xl font-bold">Everything You Need</h3>
+      <p class="mt-4 text-slate-400 max-w-2xl mx-auto">
+        Powerful AI tools to accelerate your preparation and strengthen your concepts.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="glass rounded-3xl p-6"><div class="text-3xl mb-4">📘</div><h4 class="text-xl font-semibold">Notes Generator</h4><p class="mt-2 text-slate-400 text-sm">Exam-focused notes in seconds.</p></div>
+      <div class="glass rounded-3xl p-6"><div class="text-3xl mb-4">📝</div><h4 class="text-xl font-semibold">Summary Maker</h4><p class="mt-2 text-slate-400 text-sm">Quick revision summaries.</p></div>
+      <div class="glass rounded-3xl p-6"><div class="text-3xl mb-4">🧠</div><h4 class="text-xl font-semibold">Quiz Generator</h4><p class="mt-2 text-slate-400 text-sm">MCQs and answers instantly.</p></div>
+      <div class="glass rounded-3xl p-6"><div class="text-3xl mb-4">❓</div><h4 class="text-xl font-semibold">Doubt Solver</h4><p class="mt-2 text-slate-400 text-sm">Simple explanations for tough concepts.</p></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 py-8 text-center text-sm text-slate-500">
+    Built with ⚡ by Arsh • Powered by FastAPI + Gemini
+  </footer>
+
+  <script>
+    // IMPORTANT: Replace this with your actual Render backend URL
+    const BACKEND_URL = "https://ai-study-assistant-l09p.onrender.com/generate";
+
+    const topicInput = document.getElementById('topicInput');
+    const featureSelect = document.getElementById('featureSelect');
+    const generateBtn = document.getElementById('generateBtn');
+    const outputText = document.getElementById('outputText');
+    const copyBtn = document.getElementById('copyBtn');
+
+    generateBtn.addEventListener('click', generateContent);
+
+    topicInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') generateContent();
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(outputText.textContent);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => copyBtn.textContent = 'Copy', 1500);
+      } catch {
+        copyBtn.textContent = 'Failed';
+        setTimeout(() => copyBtn.textContent = 'Copy', 1500);
+      }
+    });
+
+    async function generateContent() {
+      const topic = topicInput.value.trim();
+      const feature = featureSelect.value;
+
+      if (!topic) {
+        outputText.textContent = 'Please enter a topic first.';
+        topicInput.focus();
+        return;
+      }
+
+      generateBtn.disabled = true;
+      generateBtn.textContent = 'Generating...';
+      outputText.textContent = '🧠 StudyAI is thinking...';
+
+      try {
+        const response = await fetch(BACKEND_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            topic,
+            feature
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          outputText.textContent = data.result;
+        } else {
+          outputText.textContent = data.error || 'Something went wrong.';
+        }
+      } catch (error) {
+        outputText.textContent = '❌ Failed to connect to backend. Check your BACKEND_URL and CORS settings.';
+        console.error(error);
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = 'Generate with AI';
+      }
+    }
+  </script>
+</body>
+</html>
