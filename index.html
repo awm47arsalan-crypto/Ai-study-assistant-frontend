@@ -1,252 +1,285 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StudyAI — Premium AI Study Assistant</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           animation: {
             float: 'float 6s ease-in-out infinite',
-            pulseSlow: 'pulse 4s ease-in-out infinite',
-            gradient: 'gradient 12s ease infinite',
+            gradient: 'gradient 10s ease infinite',
           },
           keyframes: {
             float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-14px)' },
+              '0%,100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' }
             },
             gradient: {
-              '0%, 100%': { backgroundPosition: '0% 50%' },
-              '50%': { backgroundPosition: '100% 50%' },
-            },
-          },
-          boxShadow: {
-            glow: '0 0 60px rgba(34,211,238,0.25)',
-          },
-        },
-      },
-    };
+              '0%,100%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' }
+            }
+          }
+        }
+      }
+    }
   </script>
   <style>
-    html { scroll-behavior: smooth; }
     body {
       background: #020617;
+      color: white;
       overflow-x: hidden;
     }
     .glass {
-      background: rgba(15, 23, 42, 0.65);
+      background: rgba(15, 23, 42, 0.7);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255,255,255,0.08);
     }
     .gradient-text {
       background: linear-gradient(90deg, #22d3ee, #a78bfa, #22d3ee);
-      background-size: 200% 200%;
+      background-size: 200% 200%; 
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: gradient 10s ease infinite;
     }
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
+    .tool-page { display: none; }
+    .tool-page.active { display: block; }
+    .prose h1, .prose h2, .prose h3 {
+      color: #67e8f9;
+      font-weight: 700;
+      margin-top: 1.2em;
+      margin-bottom: 0.5em;
     }
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      font-family: inherit;
+    .prose p, .prose li {
+      color: #d1d5db;
+      line-height: 1.8;
+    }
+    .prose code {
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    .prose ul {
+      padding-left: 1.2rem;
+      list-style: disc;
     }
   </style>
 </head>
-<body class="text-white antialiased">
+<body class="antialiased">
+
   <!-- Background -->
+
   <div class="fixed inset-0 -z-20 bg-slate-950"></div>
-  <div class="fixed inset-0 -z-10 grid-bg opacity-30"></div>
-  <div class="fixed top-0 left-1/4 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl animate-pulseSlow -z-10"></div>
-  <div class="fixed bottom-0 right-1/4 h-96 w-96 rounded-full bg-violet-500/20 blur-3xl animate-pulseSlow -z-10"></div>
+  <div class="fixed top-20 left-20 w-96 h-96 bg-cyan-500/10 blur-3xl rounded-full -z-10"></div>
+  <div class="fixed bottom-20 right-20 w-96 h-96 bg-violet-500/10 blur-3xl rounded-full -z-10"></div>
 
   <!-- Navbar -->
-  <header class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
-    <nav class="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+
+  <header class="sticky top-0 z-50 glass border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <div>
         <h1 class="text-2xl font-bold gradient-text">StudyAI</h1>
-        <p class="text-xs text-slate-400">Premium AI Study Assistant</p>
+        <p class="text-xs text-slate-400">Your AI Study Companion</p>
       </div>
-      <a href="#generator" class="rounded-xl bg-cyan-400 px-5 py-2.5 font-semibold text-slate-950 shadow-glow hover:scale-105 transition">
-        Launch App
-      </a>
-    </nav>
+      <a href="#home" class="px-4 py-2 rounded-xl bg-cyan-400 text-slate-950 font-semibold">Home</a>
+    </div>
   </header>
 
-  <!-- Hero -->
-  <section class="mx-auto max-w-7xl px-6 py-20 md:py-28 grid md:grid-cols-2 gap-14 items-center">
-    <div>
-      <span class="inline-block rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-1 text-sm text-cyan-300">
-        Built for JEE & School Students
-      </span>
+  <!-- Home Section -->
 
-      <h2 class="mt-6 text-5xl md:text-7xl font-black leading-tight">
+  <section id="home" class="tool-page active max-w-7xl mx-auto px-6 py-20">
+    <div class="text-center max-w-4xl mx-auto">
+      <h2 class="text-5xl md:text-7xl font-black leading-tight">
         Study <span class="gradient-text">Smarter</span>
       </h2>
-
-      <p class="mt-6 text-lg text-slate-300 max-w-xl leading-8">
-        Generate notes, summaries, quizzes, and doubt solutions in seconds.
-        Your personal AI teacher that never gets tired.
+      <p class="mt-6 text-lg text-slate-300 leading-8">
+        Notes, summaries, quizzes, doubt solving, and diagrams — all powered by AI.
       </p>
-
-      <div class="mt-8 flex flex-wrap gap-4">
-        <a href="#generator" class="rounded-2xl bg-cyan-400 px-7 py-3.5 font-semibold text-slate-950 shadow-glow hover:scale-105 transition">
-          Try Now
-        </a>
-        <a href="#features" class="rounded-2xl border border-white/10 px-7 py-3.5 font-semibold hover:bg-white/5 transition">
-          Explore Features
-        </a>
-      </div>
     </div>
 
-    <!-- Generator Card -->
-    <div id="generator" class="glass rounded-3xl p-6 md:p-8 shadow-2xl animate-float">
-      <div class="flex items-center justify-between mb-6">
-        <h3 class="text-2xl font-bold">AI Generator</h3>
-        <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs text-emerald-300 border border-emerald-400/20">
-          ● Online
-        </span>
-      </div>
+```
+<div class="grid md:grid-cols-2 lg:grid-cols-5 gap-6 mt-16">
+  <button onclick="openTool('notes')" class="glass rounded-3xl p-6 hover:-translate-y-2 transition text-left">
+    <div class="text-3xl mb-3">📘</div>
+    <h3 class="font-semibold text-lg">Notes</h3>
+  </button>
 
-      <input
-        id="topicInput"
-        type="text"
-        placeholder="Enter topic (e.g. Nernst Equation)"
-        class="w-full rounded-2xl bg-slate-900/80 border border-white/10 px-4 py-3.5 outline-none focus:border-cyan-400 mb-4"
-      />
+  <button onclick="openTool('summary')" class="glass rounded-3xl p-6 hover:-translate-y-2 transition text-left">
+    <div class="text-3xl mb-3">📝</div>
+    <h3 class="font-semibold text-lg">Summary</h3>
+  </button>
 
-      <select
-        id="featureSelect"
-        class="w-full rounded-2xl bg-slate-900/80 border border-white/10 px-4 py-3.5 outline-none focus:border-cyan-400 mb-4"
-      >
-        <option value="notes">📘 Notes Generator</option>
-        <option value="summary">📝 Summary Maker</option>
-        <option value="quiz">🧠 Quiz Generator</option>
-        <option value="doubt">❓ Doubt Solver</option>
-      </select>
+  <button onclick="openTool('quiz')" class="glass rounded-3xl p-6 hover:-translate-y-2 transition text-left">
+    <div class="text-3xl mb-3">🧠</div>
+    <h3 class="font-semibold text-lg">Quiz</h3>
+  </button>
 
-      <button
-        id="generateBtn"
-        class="w-full rounded-2xl bg-gradient-to-r from-cyan-400 to-violet-400 py-3.5 font-bold text-slate-950 hover:scale-[1.02] transition"
-      >
-        Generate with AI
+  <button onclick="openTool('doubt')" class="glass rounded-3xl p-6 hover:-translate-y-2 transition text-left">
+    <div class="text-3xl mb-3">❓</div>
+    <h3 class="font-semibold text-lg">Doubt Solver</h3>
+  </button>
+
+  <button onclick="openTool('diagram')" class="glass rounded-3xl p-6 hover:-translate-y-2 transition text-left">
+    <div class="text-3xl mb-3">📊</div>
+    <h3 class="font-semibold text-lg">Diagrams</h3>
+  </button>
+</div>
+```
+
+  </section>
+
+  <!-- Tool Template -->
+
+  <section id="toolSection" class="tool-page max-w-6xl mx-auto px-6 py-12">
+    <button onclick="goHome()" class="mb-6 px-4 py-2 rounded-xl border border-white/10 hover:bg-white/5">
+      ← Back to Home
+    </button>
+
+```
+<div class="glass rounded-3xl p-6 md:p-8 animate-float">
+  <h2 id="toolTitle" class="text-3xl font-bold mb-6">Notes Generator</h2>
+
+  <input
+    id="topicInput"
+    type="text"
+    placeholder="Enter topic or question..."
+    class="w-full rounded-2xl bg-slate-900 border border-white/10 px-4 py-3 mb-4 outline-none focus:border-cyan-400"
+  />
+
+  <button
+    id="generateBtn"
+    onclick="generateContent()"
+    class="w-full rounded-2xl bg-gradient-to-r from-cyan-400 to-violet-400 py-3 font-bold text-slate-950"
+  >
+    Generate with AI
+  </button>
+
+  <div class="mt-6 glass rounded-2xl p-5">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="font-semibold text-cyan-300">Response</h3>
+      <button onclick="copyOutput()" class="text-sm px-3 py-1 rounded-lg border border-white/10 hover:bg-white/5">
+        Copy
       </button>
-
-      <div class="mt-6 rounded-2xl bg-slate-900/70 border border-white/10 p-4">
-        <div class="flex items-center justify-between mb-3">
-          <p class="text-cyan-300 font-semibold">Output</p>
-          <button
-            id="copyBtn"
-            class="text-xs rounded-lg border border-white/10 px-3 py-1 hover:bg-white/5 transition"
-          >
-            Copy
-          </button>
-        </div>
-        <pre id="outputText" class="text-sm text-slate-300 leading-7">Enter a topic and click "Generate with AI".</pre>
-      </div>
     </div>
+    <div id="outputText" class="prose prose-invert max-w-none text-sm">
+      Enter a topic and click Generate.
+    </div>
+  </div>
+
+  <div id="diagramContainer" class="mt-6 hidden glass rounded-2xl p-5">
+    <h3 class="font-semibold text-cyan-300 mb-4">Diagram</h3>
+    <div id="diagram"></div>
+  </div>
+</div>
+```
+
   </section>
 
-  <!-- Features -->
-  <section id="features" class="mx-auto max-w-7xl px-6 py-20">
-    <div class="text-center mb-12">
-      <h3 class="text-4xl md:text-5xl font-bold">Everything You Need</h3>
-      <p class="mt-4 text-slate-400 max-w-2xl mx-auto">
-        Powerful AI tools to accelerate your preparation and strengthen your concepts.
-      </p>
-    </div>
-
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="glass rounded-3xl p-6"><div class="text-3xl mb-4">📘</div><h4 class="text-xl font-semibold">Notes Generator</h4><p class="mt-2 text-slate-400 text-sm">Exam-focused notes in seconds.</p></div>
-      <div class="glass rounded-3xl p-6"><div class="text-3xl mb-4">📝</div><h4 class="text-xl font-semibold">Summary Maker</h4><p class="mt-2 text-slate-400 text-sm">Quick revision summaries.</p></div>
-      <div class="glass rounded-3xl p-6"><div class="text-3xl mb-4">🧠</div><h4 class="text-xl font-semibold">Quiz Generator</h4><p class="mt-2 text-slate-400 text-sm">MCQs and answers instantly.</p></div>
-      <div class="glass rounded-3xl p-6"><div class="text-3xl mb-4">❓</div><h4 class="text-xl font-semibold">Doubt Solver</h4><p class="mt-2 text-slate-400 text-sm">Simple explanations for tough concepts.</p></div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="border-t border-white/10 py-8 text-center text-sm text-slate-500">
-    Built with ⚡ by Arsh • Powered by FastAPI + Gemini
+  <footer class="border-t border-white/10 py-8 text-center text-sm text-slate-500 mt-20">
+    Built with ⚡ by Arsh
   </footer>
 
   <script>
-    // IMPORTANT: Replace this with your actual Render backend URL
-    const BACKEND_URL = "https://ai-study-assistant-l09p.onrender.com/generate";
+    // Replace with your Render backend URL
+    const BACKEND_URL = 'https://ai-study-assistant-l09p.onrender.com/generate';
 
-    const topicInput = document.getElementById('topicInput');
-    const featureSelect = document.getElementById('featureSelect');
-    const generateBtn = document.getElementById('generateBtn');
-    const outputText = document.getElementById('outputText');
-    const copyBtn = document.getElementById('copyBtn');
+    let currentFeature = 'notes';
 
-    generateBtn.addEventListener('click', generateContent);
+    const toolTitles = {
+      notes: '📘 Notes Generator',
+      summary: '📝 Summary Maker',
+      quiz: '🧠 Quiz Generator',
+      doubt: '❓ Doubt Solver',
+      diagram: '📊 Diagram Explainer'
+    };
 
-    topicInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') generateContent();
-    });
+    function openTool(feature) {
+      currentFeature = feature;
+      document.getElementById('home').classList.remove('active');
+      document.getElementById('toolSection').classList.add('active');
+      document.getElementById('toolTitle').textContent = toolTitles[feature];
+      document.getElementById('topicInput').value = '';
+      document.getElementById('outputText').innerHTML = 'Enter a topic and click Generate.';
+      document.getElementById('diagramContainer').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-    copyBtn.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(outputText.textContent);
-        copyBtn.textContent = 'Copied!';
-        setTimeout(() => copyBtn.textContent = 'Copy', 1500);
-      } catch {
-        copyBtn.textContent = 'Failed';
-        setTimeout(() => copyBtn.textContent = 'Copy', 1500);
-      }
-    });
+    function goHome() {
+      document.getElementById('toolSection').classList.remove('active');
+      document.getElementById('home').classList.add('active');
+      window.location.hash = 'home';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     async function generateContent() {
-      const topic = topicInput.value.trim();
-      const feature = featureSelect.value;
+      const topic = document.getElementById('topicInput').value.trim();
+      const output = document.getElementById('outputText');
+      const button = document.getElementById('generateBtn');
+      const diagramContainer = document.getElementById('diagramContainer');
+      const diagram = document.getElementById('diagram');
 
       if (!topic) {
-        outputText.textContent = 'Please enter a topic first.';
-        topicInput.focus();
+        output.innerHTML = 'Please enter a topic first.';
         return;
       }
 
-      generateBtn.disabled = true;
-      generateBtn.textContent = 'Generating...';
-      outputText.textContent = '🧠 StudyAI is thinking...';
+      button.disabled = true;
+      button.textContent = 'Generating...';
+      output.innerHTML = '🧠 StudyAI is thinking...';
+      diagramContainer.classList.add('hidden');
 
       try {
         const response = await fetch(BACKEND_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             topic,
-            feature
+            feature: currentFeature
           })
         });
 
         const data = await response.json();
 
         if (data.success) {
-          outputText.textContent = data.result;
+          output.innerHTML = marked.parse(data.result || 'No response received.');
+
+          if (data.diagram) {
+            diagramContainer.classList.remove('hidden');
+            const id = 'mermaid-' + Date.now();
+            const render = await mermaid.render(id, data.diagram);
+            diagram.innerHTML = render.svg;
+          }
         } else {
-          outputText.textContent = data.error || 'Something went wrong.';
+          output.innerHTML = data.error || 'Something went wrong.';
         }
       } catch (error) {
-        outputText.textContent = '❌ Failed to connect to backend. Check your BACKEND_URL and CORS settings.';
+        output.innerHTML = '❌ Failed to connect to backend.';
         console.error(error);
       } finally {
-        generateBtn.disabled = false;
-        generateBtn.textContent = 'Generate with AI';
+        button.disabled = false;
+        button.textContent = 'Generate with AI';
       }
     }
+
+    async function copyOutput() {
+      const text = document.getElementById('outputText').innerText;
+      await navigator.clipboard.writeText(text);
+    }
+
+    mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+
+    // Support direct URLs like #notes, #summary
+    const hash = window.location.hash.replace('#', '');
+    if (toolTitles[hash]) {
+      openTool(hash);
+    }
   </script>
+
 </body>
 </html>
